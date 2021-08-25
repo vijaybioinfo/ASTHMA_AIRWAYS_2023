@@ -49,31 +49,54 @@ edata_counts_f = "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_airways/raw/mapp
 mdata_init <- readfile(fannot, stringsAsFactors = FALSE, check.name = FALSE, row.names = 1)
 edata_counts_init <- as.matrix(readfile(edata_counts_f, check.names = FALSE, row.names = 1))
 
-# Batch corrected - resting
-pcs = c(7:9); pxs = c(10, 12)
-edata_norm_f = "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_airways/raw/batchcor_cd4/combat_corrected_20517genes_231samples_Sex-plateCorrected.Rdata"
-output_dir_i = 'umap_resting_batch_corr'
-sample_filter_i = filters_subset_df(list(c("Stim", "Unstim"), c("Cell_type", "-CD8-TRM", "-CD4-TFH")), mdata_init, v = T)
-# Batch corrected - stim
-pcs = c(7:9); pxs = c(10, 12)
-edata_norm_f = "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_airways/raw/batchcor_cd4/combat_corrected_20517genes_231samples_Sex-plateCorrected.Rdata"
-output_dir_i = 'umap_stim_batch_corr'
-sample_filter_i = filters_subset_df(list(c("Stim", "Stim"), c("Cell_type", "-CD8-TRM", "-CD4-TFH")), mdata_init, v = T)
-
-edata_norm_init <- readfile(edata_norm_f)
-# mdata$Cell_type <- factor(mdata$Cell_type, c("CD4-TRM", "CD4-TRM-like", "CD4-Teff", "CD4-Treg"))
-
 dimred_hvg(
   mdata = mdata_init,
   edata_counts = edata_counts_init,
   edata_norm = edata_norm_init,
-  pc_n = pxs,
-  perplex_or_neigh = pcs,
   showgenes = c("ITGAE", "ITGA1", "FOXP3"),
   cnames = c("Stim", "Disease", "Cell_type", "Sex"),
-  output_dir = output_dir_i,
-  samples_filter = sample_filter_i,
+  output_dir = "umap_bulk_all",
   features_filter = rownames(edata_norm_init),
+  couls = grcols,
+  show_rownames = FALSE
+)
+
+# Batch corrected - resting
+edata_norm_f = "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_airways/raw/batchcor_cd4/combat_corrected_20517genes_231samples_Sex-plateCorrected.Rdata"
+edata_norm_resting <- readfile(edata_norm_f)
+dimred_hvg(
+  mdata = mdata_init,
+  edata_counts = edata_counts_init,
+  edata_norm = edata_norm_init,
+  pc_n = c(7:9),
+  perplex_or_neigh = c(10, 12),
+  showgenes = c("ITGAE", "ITGA1", "FOXP3"),
+  cnames = c("Stim", "Disease", "Cell_type", "Sex"),
+  output_dir = 'umap_resting_batch_corr',
+  samples_filter = filters_subset_df(list(c("Stim", "Unstim"), c("Cell_type", "-CD8-TRM", "-CD4-TFH")), mdata_init, v = T),
+  features_filter = rownames(edata_norm_resting),
+  take_sig = FALSE,
+  padjthr = 0.05,
+  fitv = 0.5,
+  top_n = 800,
+  couls = grcols,
+  show_rownames = FALSE
+)
+
+# Batch corrected - stim
+edata_norm_f = "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_airways/raw/batchcor_cd4/combat_corrected_20517genes_231samples_Sex-plateCorrected.Rdata"
+edata_norm_stim <- readfile(edata_norm_f)
+dimred_hvg(
+  mdata = mdata_init,
+  edata_counts = edata_counts_init,
+  edata_norm = edata_norm_init,
+  pc_n = c(7:9),
+  perplex_or_neigh = c(10, 12),
+  showgenes = c("ITGAE", "ITGA1", "FOXP3"),
+  cnames = c("Stim", "Disease", "Cell_type", "Sex"),
+  output_dir = 'umap_stim_batch_corr',
+  samples_filter = filters_subset_df(list(c("Stim", "Stim"), c("Cell_type", "-CD8-TRM", "-CD4-TFH")), mdata_init, v = T),
+  features_filter = rownames(edata_norm_resting),
   take_sig = FALSE,
   padjthr = 0.05,
   fitv = 0.5,
