@@ -1,4 +1,4 @@
-# ASTHMA AIRWAYS 2021
+## ASTHMA AIRWAYS 2021
 
 This repository contains the scripts used to analyzed our asthma airways bulk and single-cell data.
 
@@ -9,7 +9,7 @@ Division of Vaccine Discovery
 La Jolla Institute for Immunology
 La Jolla, CA 92037, USA
 
-## Sex stratified associations of airway cytotoxic CD4+ T cells with tissue-residency and pro-inflammatory features in severe asthma
+### Sex stratified associations of airway cytotoxic CD4+ T cells with tissue-residency and pro-inflammatory features in severe asthma
 
 Description
 ---
