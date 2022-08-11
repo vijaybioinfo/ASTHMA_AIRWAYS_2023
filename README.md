@@ -15,9 +15,12 @@ Description
 ---
 
 *Demultiplexing libraries*: Cell Ranger was used to demultiplex the 10x libraries.
+
 *Demultiplexing donors*: Demuxlet was used to derive the cells' donor source.
+
 *Quality control*: [An in-house script](https://github.com/vijaybioinfo/quality_control/blob/main/single_cell.R) was used to explore the quality of the data and select the thresholds.
-Clustering: Seurat was used to cluster the data.
+
+*Clustering*: Seurat was used to cluster the data.
 
 For more specific information about the data generation and processing, please check citation.
 
