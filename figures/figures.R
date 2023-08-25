@@ -1,4 +1,5 @@
-
+## Authors: Francisco Emmanuel Castaneda Castro & Ciro Ramirez-Suastegui 
+### This code will do the specified figures on the CD4 BAL paper, bulk and scRNA seq
 ########################################
 ####     Rebuttal CD4_BAL          #####
 ########################################
@@ -25,8 +26,6 @@ source("/home/ciro/scripts/figease/figease.R")
 library(Seurat)
 library(ggplot2)
 library(tidyverse)
-
-  # outdir<-kevinchange"/home/fcastaneda/fcastaneda-temp/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal_Figures_Final"
 
   outdir<-"/home/fcastaneda/fcastaneda-temp/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal_Figures_Final"
 
