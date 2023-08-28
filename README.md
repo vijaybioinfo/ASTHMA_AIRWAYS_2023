@@ -2,7 +2,7 @@
 
 This repository contains the scripts used to analyze our asthma airways bulk and single-cell data.
 
-Developer: Ciro Ramírez-Suástegui (ciro@lji.org) & Francisco Emmanuel Castaneda-Castro
+Developer: Ciro Ramírez-Suástegui (ciro@lji.org) & Francisco Emmanuel Castañeda-Castro
 
 Vijayanand Lab
 Division of Vaccine Discovery
