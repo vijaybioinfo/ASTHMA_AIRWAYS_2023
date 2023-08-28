@@ -618,7 +618,7 @@ setwd(paste0(outdir, "/resting"))
   })
 }
 
-{ cat(redb("### Upset plots -Fig3L & Supl Fig3C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Upset plots -Fig3L & Supl Fig5C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
     bulkTCR<-read.csv("/home/fcastaneda/fcastaneda-temp/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/sharing_bulk_combinations/all_table_info2.csv")
     dir.create("upset_plots")
     dir.create("upset_plots/resting")
@@ -942,7 +942,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-{ cat(red_bold("### Crater plots -Fig4B & Suppl Fig 6A  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(red_bold("### Crater plots -Fig4A & Suppl Fig 6A  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # source("/home/ciro/scripts/handy_functions/devel/plots_crater.R")
   # source("/home/ciro/scripts/handy_functions/R/stats_summary_table.R")
 
@@ -1161,7 +1161,7 @@ cat(redb("### Dotplot UNSTIM & STIM -Fig5B  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
 
 setwd(paste0(outdir, "/stim"))
 
-{ cat(redb("### Blanks volcano GZMBpvsGZMBn -Fig 6C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Blanks volcano GZMBpvsGZMBn -Fig 5C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # setwd("/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/new_figures_paper/stim/dgea")
   #I ran the documented line and change the name of the output file
   # dir.create("volcano")
