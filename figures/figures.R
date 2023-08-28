@@ -1398,7 +1398,7 @@ cat(redb("### Dotplot STIM - Fig5D ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")) {
 
 ### Supplementary Figures
 setwd(paste0(outdir, "/resting"))
-{ cat(redb("### Blanks volcano TRMDP vs TRMSP Treatment covariate -Supp Fig4B ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Blanks volcano TRMDP vs TRMSP Treatment covariate -Supp Fig4A ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # setwd("/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting")
   #I ran the documented line and change the name of the output file
   # dir.create("volcano")
@@ -1548,7 +1548,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-{ cat(redb("### Correlation DGEA TRMDP vs TRMSP sexcov and treatment covariate -Sup Fig4C### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Correlation DGEA TRMDP vs TRMSP sexcov and treatment covariate -Sup Fig4B & Sup Fig4C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   library(data.table)
   library(dplyr)
 
@@ -1597,10 +1597,12 @@ setwd(paste0(outdir, "/resting"))
     sex_cov2 = sex_cov23$gene
   )
 
+  #Sup Fig4B
   pdf("./dgeas_comp/TRMDPvsTRMDP_covSex_and_covTreat_26_Jun.pdf")
   ggvenn(dgeas_intersect_23)
   dev.off()
 
+  #Sup Fig4C
   library(ggpubr)
   pdf("./dgeas_comp/correlation_TRMDPvsTRMDP_covSex_and_covTreat_26_Jun.pdf")
   ggscatter(dgeas_correlation_23, x = "log2FC_sex", y = "log2FC_treat",
@@ -1795,7 +1797,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-{ cat(redb("### Blanks volcano TRMDP biologics_vs_nonBiologics -SupFig 4G### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Blanks volcano TRMDP OCS_vs_noOCS -SupFig 4E### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # setwd("/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting")
   #I ran the documented line and change the name of the output file
   # dir.create("volcano")
@@ -1960,7 +1962,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-{ cat(redb("### Public datasets GZMB+ Healthy -SupFig6B ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Public datasets GZMB+ Healthy - Sup Fig4G ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   #Integration in /Volumes/bioadhoc/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/Rebuttal_CD4/scripts/integration/integration_clustering.R
   dir.create("./tables_clustering")
 
@@ -2065,7 +2067,7 @@ setwd(paste0(outdir, "/resting"))
     write.table(gene_expr_donor_perc,"./tables_clustering/genes_percentage_perdonor_Asthma_integrated.csv", sep=",", col.names = NA)
 }
 
-{ cat(red_bold("### Kara Mould in healthy GZMB expression -SupFig6B### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
+{ cat(red_bold("### Kara Mould in healthy GZMB expression -Sup Fig4G ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
 
   dir.create("tables_clustering/Mould")
   setwd("tables_clustering/Mould")
@@ -2097,7 +2099,7 @@ setwd(paste0(outdir, "/resting"))
   make_prop(prop_GZMB_in_healthy_mould, "GZMBp_CD4Tcells_Mould")
 }
 
-{ cat(red_bold("### GSEA -SupFig6C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(red_bold("### GSEA -SupFig 6B & SupFig 6C ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
     source("/home/ciro/scripts/handy_functions/R/gsea_tests.R")
     source("/home/ciro/scripts/handy_functions/R/stats_summary_table.R")
     dir.create("gsea")
