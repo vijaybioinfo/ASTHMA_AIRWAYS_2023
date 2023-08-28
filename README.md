@@ -1,15 +1,15 @@
 ## ASTHMA AIRWAYS 2021
 
-This repository contains the scripts used to analyzed our asthma airways bulk and single-cell data.
+This repository contains the scripts used to analyze our asthma airways bulk and single-cell data.
 
-Developer: Ciro Ramírez-Suástegui (ciro@lji.org)
+Developer: Ciro Ramírez-Suástegui (ciro@lji.org) & Francisco Emmanuel Castaneda-Castro
 
 Vijayanand Lab
 Division of Vaccine Discovery
 La Jolla Institute for Immunology
 La Jolla, CA 92037, USA
 
-### Sex stratified associations of airway cytotoxic CD4+ T cells with tissue-residency and pro-inflammatory features in severe asthma
+### Cytotoxic CD4+ tissue-resident memory T cells are associated with asthma severity.
 
 Description
 ---
