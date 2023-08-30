@@ -522,7 +522,7 @@ setwd(paste0(outdir, "/resting"))
         }
 }
 
-{ cat(redb("### GSVA per donor list of genes -Fig3I & Fig 4D&E  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### GSVA per donor list of genes -Fig3I & Fig 4D&E && Supp Fig 4B and Supp Fig 4C GSVA ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # dir.create("gsva")
   source("/home/ciro/scripts/handy_functions/R/gsea_tests.R") # gsea_matrix, gsea_plot_summary, gsea_process_list")
   source("/home/ciro/scripts/handy_functions/R/stats_summary_table.R")
