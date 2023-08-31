@@ -1398,7 +1398,152 @@ cat(redb("### Dotplot STIM - Fig5D ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")) {
 }
 
 ### Supplementary Figures
+                                   
 setwd(paste0(outdir, "/resting"))
+  { cat(redb("### Dotplot Supp Fig 1G ## Check ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+    dir.create("dotplots")
+
+    fconfigs = list(
+      list(result_id = "./dotplots/", sufix = "16april2023_genes",
+      object = "sc_cd4resting",
+        edata = "sc_cd4resting@assays$RNA@data", metadata = "sc_cd4resting@meta.data",
+        size = c(5,5),
+        axis_x = list(
+        col = "celltype_subset", order = c("TRMDP", "TRMSP", "TCM", "Treg", "TFH", "ThIFNr", "CellCycle", "CTLs")
+      # col = "celltype", order = c("Basal", "Club", "Ciliated", "Fibroblast", "Ionocyte", "Tcell", "Bcell", "DC", "Neutrophils", "Mast", "Cycling")
+        ),
+        features =  rev(c("IFNG", "TNF", "CCL5", "TBX21", "CXCR3", "IL4", "IL5", "IL13",  "GATA3", "CCR4", "IL17A", "RORC"))
+
+      )
+    )
+
+    pp_curtains = fig_plot_curtain(fconfigs, verbose = 2) #dot.scale = 10
+    pp_curtains = fig_plot_curtain(fconfigs[1], verbose = 2,return_plot=TRUE, col.min = 0)
+
+} 
+
+{ cat(red_bold("### GSEA Supp Fig 1E ##Check ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+          source("/home/ciro/scripts/handy_functions/R/gsea_tests.R")
+          source("/home/ciro/scripts/handy_functions/R/stats_summary_table.R")
+          dir.create("gsea")
+          dir.create("gsea/sc_cd4resting_16april2023/figures")
+
+          gdf <- readfile("/home/fcastaneda/fcastaneda-temp/rnaseq-sc-standar/CD8andCD4_BalBiopsy/info/signature_rebb_abril16.csv", stringsAsFactors = FALSE)
+
+          slist = gsea_process_list(lapply(gdf, function(x) x[-1] ))
+
+          fconfigs = list(
+            list(
+              result_id = "./gsea/sc_cd4resting_19april2023/",
+              edata = "expm1(sc_cd4resting@assays$RNA@data)",
+              metadata = "sc_cd4resting@meta.data",
+              lists = slist, comparisons = "celltype_subset")
+              )
+
+            pp_gsea = fig_gsea(fconfigs, axes=list(columns=names(slist), rows=c("TRMDP", "TRMSP", "TCM", "Treg", "TFH", "ThIFNr", "CellCycle", "CTLs")), axes_cluster=FALSE)
+
+
+            gsea_results<-readRDS("/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting/gsea/sc_cd4resting_16april2023/tests_celltype_subset_0_10lists.rds")
+
+            gsea_summary_plot(tests_list= gsea_results,
+              path="/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting/gsea/sc_cd4resting_16april2023/figures2/",
+              axes=list(columns=c("TRMDP", "TRMSP", "TCM", "Treg", "TFH", "ThIFNr", "CellCycle", "CTLs")), #rows=names(slist),
+              axes_cluster=FALSE,
+              padjthr = 1,
+              nesthr = 0,
+            )
+
+            axes=list(rows=names(slist),columns=c("TRMDP", "TRMSP", "TCM", "Treg", "TFH", "ThIFNr", "CellCycle", "CTLs"))#rows=names(slist),
+            axes_cluster=FALSE
+            Rebbuttal _type = "gg"
+            return_plot = TRUE
+
+
+            gsea_summary_list = gsea_summary(
+              tests_list = gsea_results,
+              type = c("NES", "padj", "NLE", "ES", "LE"),
+              path = "/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting/gsea/sc_cd4resting_16april2023/figures2/", cache = TRUE,
+              padjthr = 0.05,
+              nesthr = 0.5,
+              pathways = NULL
+            )
+
+            gsea_summary_list2 = gsea_summary(
+              tests_list = gsea_results,
+              type = c("NES", "padj", "NLE", "ES", "LE"),
+              path = "/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting/gsea/sc_cd4resting_16april2023/figures2/", cache = TRUE,
+              padjthr = 1,
+              nesthr = 0.5,
+              pathways = NULL
+            )
+
+
+            plot_var = gsea_summary_list[[2]]
+            fname0 = gsea_summary_list[[3]]
+
+            #NOTE: #BECAUSE TH2 IS NOT SIGNIFICANT
+            modif<-gsea_summary_list[[1]]
+            th2<-gsea_summary_list2[[1]]
+            th2[rownames(th2)== "Genes.upregulated.in.TH2.cells", ]<-NA
+
+            modif<-rbind(modif, "Genes.upregulated.in.TH2.cells"=th2[rownames(th2)== "Genes.upregulated.in.TH2.cells", ])
+
+            tmysum <- mysum <- modif
+            na.rm = FALSE
+            tmysum[is.na(tmysum)] <- 0
+            if(any(colnames(mysum) %in% axes$columns)){
+              mysum <- mysum[, axes$columns[axes$columns %in% colnames(mysum)]]
+            }else if(isTRUE(axes_cluster)){
+              hc <- hclust(dist(scale(t(tmysum))))
+              mysum <- mysum[, hc$labels[hc$order]]
+            }
+            if(any(rownames(mysum) %in% axes$rows)){
+              mysum <- mysum[axes$rows[axes$rows %in% rownames(mysum)], ]
+            }else if(isTRUE(axes_cluster)){
+              hc <- hclust(dist(scale(tmysum)))
+              mysum <- mysum[hc$labels[hc$order], ]
+            }
+            if(isTRUE(na.rm)) mysum[is.na(mysum)] <- 0
+
+            ph <- if(isTRUE(grepl("gg", heatmap_type))){
+              tmp = c("#67001f", "#b2182b", "#d6604d", "#f4a582", "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de", "#4393c3", "#2166ac", "#053061")
+              mypalette <- colorRampPalette(colors = rev(tmp), space = 'Lab')
+              ddf = reshape2::melt(mysum)
+              ddf$Var1 <- factor(ddf$Var1, rev(rownames(mysum)))
+              ddf$Var2 <- factor(as.character(ddf$Var2), colnames(mysum))
+              p <- ggplot(ddf, aes(x = Var2, y = Var1)) +
+                geom_tile(aes(fill = value)) +
+                scale_fill_gradientn(colours = mypalette(20)) +
+                labs(fill = NULL, x = NULL, y = NULL) +
+                theme(axis.text.x = element_text(angle = 90))
+              pdf(paste0(fname0, "_heatmap.pdf"), width = 10, height = 10); print(p); p
+            }else{
+              pheatmap::pheatmap(
+                mat                  = mysum,
+                cluster_rows         = FALSE,
+                cluster_cols         = FALSE,
+                scale                = 'none',
+                border_color         = NA,
+                show_colnames        = TRUE,
+                show_rownames        = TRUE,
+                main                 = plot_var[[1]]$title,
+                na_col               = "#BEBEBE",
+                annotation_legend    = TRUE,
+                annotation_names_col = TRUE,
+                annotation_names_row = TRUE,
+                drop_levels          = TRUE,
+                filename             = paste0(fname0, "_heatmap.pdf"),
+                width = 10, height = 7,
+                ...
+              );
+            }
+
+            graphics.off()
+
+
+}
+
+                                   
 { cat(redb("### Blanks volcano TRMDP vs TRMSP Treatment covariate -Supp Fig3A ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   # setwd("/mnt/bioadhoc-temp/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/CD8andCD4_BalBiopsy/results/CD4_Rebuttal/resting")
   #I ran the documented line and change the name of the output file
