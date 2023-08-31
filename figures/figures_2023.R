@@ -893,7 +893,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-### Figure 3 in ASTHMA_AIRWAYS_2021/trajectory/monocle_final.R
+### Figure 3J in 
 ### Supp Figure 3K in ASTHMA_AIRWAYS_2021/trajectory/monocle_final.R
 
 ### Figure 4
@@ -2108,7 +2108,7 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-{ cat(redb("### Public datasets GZMB+ Healthy - Sup Fig 3I ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
+{ cat(redb("### Public datasets GZMB+ Healthy - Sup Fig 3I & Fig 2H ??  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
   #Integration in /Volumes/bioadhoc/Groups/vd-vijay/fcastaneda/rnaseq-sc-standar/Rebuttal_CD4/scripts/integration/integration_clustering.R
   dir.create("./tables_clustering")
 
@@ -2213,7 +2213,7 @@ setwd(paste0(outdir, "/resting"))
     write.table(gene_expr_donor_perc,"./tables_clustering/genes_percentage_perdonor_Asthma_integrated.csv", sep=",", col.names = NA)
 }
 
-{ cat(red_bold("### Kara Mould in healthy GZMB expression -Sup Fig4I ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
+{ cat(red_bold("### Kara Mould in healthy GZMB expression -Sup Fig4I & Fig 2H ??  ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n")
 
   dir.create("tables_clustering/Mould")
   setwd("tables_clustering/Mould")
