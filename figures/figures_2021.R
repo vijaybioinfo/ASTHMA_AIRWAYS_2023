@@ -48,12 +48,7 @@ sc_cd4stim@meta.data$tag_GZMB = ifelse(tvar, "GZMBp", "GZMBn")
       vars2col = c("cluster.celltype_subset"), plot_main = TRUE,
       facet = c("sex_disease"), redu = redu[[1]],
       filters = NULL, sample_even = TRUE, per_facet = TRUE,
-      cols = sc_cd4resting_ident$col),
-    list(object = "sc_cd4stim",
-      vars2col = c("orig.asthma", "cluster.celltype_subset"), plot_main = TRUE,
-      facet = c("orig.asthma"), redu = redu[[1]],
-      filters = NULL, sample_even = TRUE, per_facet = TRUE,
-      cols = c(sc_cd4resting_ident$col, MA = "#0000FF", SA = "#FF2600"))
+      cols = sc_cd4resting_ident$col)
   )
 
   for (fconfig in fconfigs) {
@@ -115,163 +110,6 @@ sc_cd4stim@meta.data$tag_GZMB = ifelse(tvar, "GZMBp", "GZMBn")
   }
 }
 
-{ cat(red_bold("#### Markers: heatmap #### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
-  source("/home/ciro/scripts/handy_functions/R/stats_summary_table.R")
-  result_id = "clusters_markers/"; dir.create("clusters_markers", showWarnings = FALSE)
-  fconfigs = list(
-    list(object = "sc_cd4resting",
-    markers = paste0(
-      dirnamen(global_objects_f['sc_cd4resting'], 3), "/markers/20PCs_",
-      sc_cd4resting_clust,
-      "_MAST/result_MAST_DEGsTAT_LFC0.25_QVAL0.05_CPM.csv"),
-    clusters_column = "cluster",
-    clusters_names = sc_cd4resting_ident[[1]],
-    ntop = 200, cols = sc_cd4resting_ident$col, sufix = "_unique")
-  )
-  for (fconfig in fconfigs) {}
-    fname0 = paste0(result_id, fconfig$object, "_top", fconfig$ntop, fconfig$sufix)
-    cat(cyan("-", fname0, "\n"))
-    markers_df <- readfile(fconfig$markers, stringsAsFactors = FALSE, row.names = 1)
-    if(is.null(markers_df$gene_name)) markers_df$gene <- gsub("'", "", markers_df$gene_name)
-    if(is.null(fconfig$clusters_names))
-      fconfig$clusters_names = setNames(nm = gtools::mixedsort(unique(markers_df$cluster)))
-    markers_df$cluster <- if(all(fconfig$clusters_names != names(fconfig$clusters_names))){
-      tmp <- paste0(names(fconfig$clusters_names), ": ", fconfig$clusters_names)
-      tvar <- as.character(markers_df$cluster)
-      factor(paste0(tvar, ": ", fconfig$clusters_names[tvar]), tmp)
-    }else{ factor(markers_df$cluster, names(fconfig$clusters_names)) }
-    markers_df <- markers_df[order(markers_df$cluster), ]
-    tvar <- markers_df$Dpct > .1;
-    cat(" Filter out by %:", sum(!tvar), "/", length(tvar), "\n")
-    markers_df <- markers_df[tvar, ]; tvar <- markers_df$avg_logFC > .25;
-    cat(" Filter out by LFC:", sum(!tvar), "/", length(tvar), "\n")
-    markers_df <- markers_df[tvar, ]
-
-    uddf <- as.data.frame.matrix(table(markers_df[, c("gene", "cluster")]))
-    pdf(paste0(fname0, "_upset.pdf"), onefile = FALSE)
-    print(UpSetR::upset(data = uddf, sets = colnames(uddf)))
-    dev.off()
-
-    if(grepl("uniq", fname0)){
-      tvar <- !grepl("&", markers_df$sCluster);
-      cat(" Filter out by %:", sum(!tvar), "/", length(tvar), "\n")
-      markers_df <- markers_df[tvar, ]
-    }
-    topgenes <- get_top_n(x = markers_df, n = fconfig$ntop)
-    topgenes <- topgenes[!duplicated(topgenes$gene), ]
-    genes <- show_found(topgenes$gene, rownames(eval(parse(text = fconfig$object))), v = TRUE)
-    annor <- data.frame(RowGroup = topgenes$cluster, row.names = as.character(topgenes$gene))
-    write.csv(annor, file = paste0(fname0, ".csv"))
-    png(paste0(fname0, ".png"), width = 1500, height = 1700, res = 250)
-    custom_heatmap(
-      object = eval(parse(text = fconfig$object)),
-      rnames = rownames(annor),
-      orderby = fconfig$clusters_column,
-      use_mean = fconfig$clusters_column,
-      sample_it = c(cname = fconfig$clusters_column, maxln = "-1000"),
-      scale_row = TRUE,
-      categorical_col = c(fconfig$clusters_column),
-      feature_order = TRUE,
-      couls = fconfig$cols,
-      hcouls = c('yellow', 'black', 'blue'),
-      regress = c('nCount_RNA', 'percent.mt'),
-      topz = 2,
-      verbose = TRUE,
-      type = "pheat",
-      show_rownames = FALSE,
-      show_colnames = FALSE,
-      annotation_row = annor, annotation_names_row = FALSE, annotation_names_col = FALSE
-    )
-    graphics.off()
-  }
-}
-
-{ cat(red_bold("### Dot/curtain plots ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"))
-  source("/home/ciro/scripts/handy_functions/devel/plots_dotplot.R")
-  result_id = "dotplots/"; dir.create("dotplots", showWarnings = FALSE)
-  fconfigs = list(
-    list(
-      object = "sc_cd4resting", name = "main",
-      features = c("ITGAE", "CD69", "ITGA1", "AMICA1", "ZNF683", "S1PR1", "CCR7",
-        "TCF7", "ICAM2", "SELL", "FOXP3", "IL2RA", "IKZF2", "MAF", "PDCD1", "CXCL13",
-        "IFIT1", "IFIT3", "OAS1", "TOP2A", "MKI67", "GZMA", "GZMB", "GZMH", "GNLY", "PRF1"),
-      axis_x = list(name = "cluster.celltype_subset")
-    ),
-    list(
-      object = "sc_cd4resting", name = "s3",
-      features = c("NFATC2", "CSK", "LAT", "LCP2", "CD40LG", "CD52", "HLA-DRB1",
-        "HLA-DRB5", "HLA-DRA", "HLA-DPB1", "HLA-DPA1", "HLA-DQB1", "IFNG", "TNF",
-        "TNFSF14", "CCL4", "CKLF", "CCL5"),
-      axis_x = list(name = "cluster.celltype_subset", order = c("1: TRMSP", "0: TRMDP"))
-    ),
-    list(
-      object = "sc_cd4resting", name = "cl0_sex_disease",
-      features = c("NFATC2", "CSK", "LAT", "LCP2", "CD40L", "CD52", "HLA-DRB1",
-        "HLA-DRB5", "HLA-DRA", "HLA-DPB1", "HLA-DPA1", "HLA-DQB1", "IFNG", "TNF",
-        "TNFSF14", "CCL4", "CKLF", "CCL5"),
-      axis_x = list(name = c("cluster", "orig.Sex", "orig.asthma"),
-        order = c("0_Female_MA", "0_Female_SA", "0_Male_MA", "0_Male_SA"))
-    ),
-    list(object = "sc_cd4resting", name = "cl0to5_disease",
-      features = c("CREM", "DUSP1", "DUSP2", "DUSP4", "TNFAIP3", "FKBP5", "DDIT4"),
-      axis_x = list(name = c("cluster", "orig.asthma"),
-      order = paste0(0:5, rep(c("_MA", "_SA"), each = 6)))),
-    list(object = "sc_cd4resting", name = "sex_disease_tcr_damp",
-      features = c("CREM", "DUSP1", "DUSP2", "DUSP4", "TNFAIP3", "METRNL"),
-      axis_x = list(name = c("sex_disease"),
-      order = c("Male-MA", "Male-SA", "Female-MA", "Female-SA"))),
-    list(object = "sc_cd4resting", name = "sex_disease_gr",
-      features = c("FKBP5", "DDIT4", "TSC22D3", "HOPX", "ALOX5AP", "GLUL", "RHOB",
-        "CHPT1", "STOM", "CAPG", "CD9", "RABAC1", "TSPO", "FOXN2", "KLF9", "TXNIP",
-        "CITED2", "FXYD5", "SOCS1", "TMEM243", "PER1", "ERN1", "VAMP8", "RASSF7",
-        "CCND3", "ISG20", "MT2A"), axis_x = list(name = c("sex_disease"),
-      order = c("Male-MA", "Male-SA", "Female-MA", "Female-SA")))
-  )
-  # tvar = lapply(fconfigs, function(x) show_found(unlist(x$features), rownames(sc_cd4resting), verbose = TRUE) )
-
-  for(fconfig in fconfigs) {
-    fnames <- paste0(result_id, fconfig$object, "_", fconfig$name)
-    cat(cyan("-", fnames, "\n"))
-    myfeatures = show_found( casefold(fconfig$features, upper = TRUE),
-      rownames(eval(parse(text = fconfig$object))), v = TRUE)
-    scells = filters_subset_df(fconfig$filters, eval(parse(text = fconfig$object))@meta.data, v = TRUE)
-    ddf = fig_set_identities(eval(parse(text = fconfig$object))@meta.data, fconfig$axis_x, verbose = TRUE)
-    eval(parse(text = paste0(fconfig$object, "@meta.data$tmp <- ddf$Identity")))
-    scells <- show_found(rownames(ddf)[!is.na(ddf$Identity)], scells)
-    only2 = nlevels(eval(parse(text = fconfig$object))@meta.data[scells, ]$tmp) == 2
-    pdots <- Seurat::DotPlot(
-      object = eval(parse(text = fconfig$object))[, scells], features = myfeatures,
-      cols = c('#fffef0', '#ff0000'), group.by = "tmp", col.min = 0, col.max = 1.5
-    ) + coord_flip() + labs(x = NULL, y = NULL) +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    if(only2) pdots <- pdots + geom_point(mapping = aes(size = pct.exp), shape = 1, color = "#BEBEBE")
-    pdots$guides$colour$title <- "Z-scored\nAverage\nExpression"
-    pdots$guides$size$title <- "Percent\nExpressed"
-    pdf(paste0(fnames, ".pdf"), width = 6, height = 8)
-    print(pdots)
-    graphics.off()
-    pdf(paste0(fnames, "_blank.pdf"), width = 5, height = 8)
-    print(plot_blank(pdots))
-    graphics.off()
-    if(only2){
-      fnames = paste0(fnames, "_mod")
-      pdots <- dot_plot(
-        edata = as.matrix(eval(parse(text = fconfig$object))[, scells]@assays$RNA@data[myfeatures, ]),
-        mdata = ddf[scells, ], columns = "Identity",
-        scale_mean = FALSE, features = myfeatures,
-        values_trans = expm1, values_norm = function(x) log2(x+1),
-        cols = c('#fffef0', '#ff0000')
-      )
-      pdf(paste0(fnames, ".pdf"), width = 8, height = 10)
-      print(pdots)
-      graphics.off()
-      pdf(paste0(fnames, "_blank.pdf"), width = 8, height = 10)
-      print(plot_blank(pdots))
-      graphics.off()
-    }
-  }
-}
-
 { cat(red_bold("### Markers: violins/dim. red. ### %%%%%%%%%%%%%%%%%%%%%%%%\n"))
   dir.create("violins", showWarnings = FALSE)
   dir.create("dim_reduction_markers", showWarnings = FALSE)
@@ -291,16 +129,10 @@ sc_cd4stim@meta.data$tag_GZMB = ifelse(tvar, "GZMBp", "GZMBn")
   signatures_df <- read.csv(signatures_f, row.names = 1)
   sc_cd4stim@meta.data = joindf(sc_cd4stim@meta.data, signatures_df)
   fconfigs = list(
-    list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting/",
-      features = c("ITGAE", "CD69", "HOPX", "ZNF683"), sufix = "C0REST_",
-      axis_x = list(name = "cluster", order = c("0", "REST"))),
-    list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting/",
-      features = c("ITGAE", "CD69", "HOPX", "ZNF683"), sufix = "C0n1REST_",
-      axis_x = list(name = "cluster", order = c("0", "1", "REST"))),
-    list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting/",
+    f1g = list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting/",
       features = c("ITGAE", "CD69", "HOPX", "ZNF683"), sufix = "C0n1n2_",
       axis_x = list(name = "cluster", order = c("0", "1", "2"))),
-    list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting_f3bf/",
+    f2d = list(object = "sc_cd4resting", result_id = "violins/sc_cd4resting_f3bf/",
       features = c("GZMA", "GZMB", "GZMH", "FASLG", "HOPX", "ZNF683",
         "HLA-DRB1", "HLA-DRB5", "HLA-DRA", "HLA-DPB1", "HLA-DPA1", "HLA-DQB1",
         "IFNG", "TNF", "TNFSF14", "CCL4", "CKLF", "CCL5"

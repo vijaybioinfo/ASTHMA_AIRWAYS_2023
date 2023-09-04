@@ -15,61 +15,6 @@
 # include = "sc_cd4resting"
 source("/home/ciro/asthma_airways/scripts/final_figures_cd4/global.R")
 
-### Dimentional reduction plot ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-result_id = paste0("f3a_", names(redu))
-myobject = "sc_cd4resting"
-myobject = "sc_cd4stim"
-scells = colnames(eval(parse(text = myobject)))
-mycols = eval(parse(text = paste0(myobject, "_ident")))$colours
-group_by = eval(parse(text = paste0(myobject, "_clust")))
-
-dir.create("umaps")
-group_by = "orig.asthma"
-mycols = c(MA = "#0000FF", SA = "#FB0207")
-result_id = paste0("umaps/", myobject, "_disease_all")
-# result_id = paste0("umaps/", myobject, "_disease_female")
-# scells <- filters_subset_df(c("orig.Sex", "Female"), eval(parse(text = myobject))@meta.data, v = TRUE)
-# result_id = paste0("umaps/", myobject, "_disease_male")
-# scells <- filters_subset_df(c("orig.Sex", "Male"), eval(parse(text = myobject))@meta.data, v = TRUE)
-# scells <- sample_even(annot = eval(parse(text = myobject))@meta.data[scells, ], cname = group_by, v = TRUE)
-
-p <- DimPlot(
-  object = eval(parse(text = myobject))[, scells],
-  cols = mycols,
-  reduction = names(redu),
-  group.by = group_by
-) + labs(x = redu[[1]][1], y = redu[[1]][2])
-
-pdf(paste0(result_id, ".pdf"))
-print(p)
-graphics.off()
-pdf(paste0(result_id, "_blank.pdf"))
-print(plot_blank(p))
-graphics.off()
-
-### Disease dimentional reduction plot ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-result_id = "disease_split_"
-cname = "orig.asthma"
-
-scells <- sample_even(annot = sc_cd4resting@meta.data, cname = cname, v = TRUE)
-p <- DimPlot(
-  object = sc_cd4resting[, scells],
-  # cells = scells,
-  cols = v2cols(sc_cd4resting@meta.data[, sc_cd4resting_clust], sc_cd4resting_ident$colours),
-  reduction = names(redu),
-  group.by = sc_cd4resting_clust,
-  label = TRUE, #pt.size = 0.8
-  split.by = cname,
-) + labs(x = redu[[1]][1], y = redu[[1]][2]) + theme(legend.position = "none")
-
-fname <- paste0(result_id, names(redu))
-pdf(paste0(fname, ".pdf"), width = 12)
-print(p)
-graphics.off()
-pdf(paste0(fname, "_blank.pdf"), width = 12)
-print(plot_blank(p))
-graphics.off()
-
 ### Molecules: dot-plots/violins ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dir.create("dotplots")
 genes = c(
