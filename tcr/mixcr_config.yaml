@@ -1,0 +1,24 @@
+---
+project_id: asthma_airways_cd4
+# either a path to the folder or a text file with paths
+fastqs: "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_pjs/raw/mapping_2020_08_27/cd4_samples.csv"
+output_dir: "/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_pjs/results/mixcr_rnseq"
+job:
+  walltime: 08:00:00
+  mem: 30gb
+  ppn: 1
+  nodes: 1
+  submit: yes
+mixcr_jar: /home/ciro/bin/mixcr-2.1.10/mixcr.jar
+# location for temporal data storage
+scratch_dir: /mnt/beegfs
+...
+# MDATA=/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_pjs/raw/mapping_2020_08_27/metadata_filtered_airways_varsubset.csv
+# function join_by { local d=$1; shift; local f=$1; shift; printf %s "$f" "${@/#/$d}"; }
+# SAMPLES_LS=$(cut -d, -f1 ${MDATA} | grep CD4 | sed 's/"//g')
+# SAMPLES=$(join_by '|' ${SAMPLES_LS})
+# FASTQ_DIR=/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_pjs/raw/mapping_2020_08_27/2.Internal_files/fastq_input
+# FASTQ_FILE=/mnt/BioAdHoc/Groups/vd-vijay/cramirez/asthma_pjs/raw/mapping_2020_08_27/cd4_samples.csv
+# ls ${FASTQ_DIR}/*CD4*_R1.fa* | sed 's/_R1.*//g' | grep -E "${SAMPLES}" > ${FASTQ_FILE}
+# echo ${FASTQ_FILE}
+# head ${FASTQ_FILE}
