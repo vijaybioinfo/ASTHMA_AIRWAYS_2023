@@ -1,7 +1,7 @@
 ## ASTHMA AIRWAYS 2021
 
-This repository contains the scripts used to analyze our asthma airways bulk and single-cell data.
-https://github.com/vijaybioinfo/ASTHMA_AIRWAYS_2023/
+This [repository](https://github.com/vijaybioinfo/ASTHMA_AIRWAYS_2023/) contains the scripts used to analyze our asthma airways bulk and single-cell data.
+
 
 Developer: Ciro Ramírez-Suástegui (ciro@lji.org) & Francisco Emmanuel Castañeda-Castro.
 
