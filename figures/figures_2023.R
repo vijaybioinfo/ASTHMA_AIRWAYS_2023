@@ -893,8 +893,8 @@ setwd(paste0(outdir, "/resting"))
 
 }
 
-### Figure 3J in 
-### Supp Figure 3K in ASTHMA_AIRWAYS_2021/trajectory/monocle_final.R
+### Figure 3J in ASTHMA_AIRWAYS_2023/trajectory/monocle_Fig3J.R
+### Supp Figure 3K in ASTHMA_AIRWAYS_2023/trajectory/monocle_final_SuppFigure3K.R
 
 ### Figure 4
 
